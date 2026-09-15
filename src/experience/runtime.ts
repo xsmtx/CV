@@ -3,6 +3,13 @@ export type RendererMode = "INITIALIZING" | "WEBGL" | "SPATIAL";
 export const SCENE_TRAVEL_MS = 2000;
 
 export interface WorldRuntime {
+  impact: {
+    serial: number;
+    active: boolean;
+    quiet: boolean;
+    age: number;
+    pointer: { x: number; y: number };
+  };
   skyTime: number;
   scene: number;
   travel: {
@@ -38,6 +45,13 @@ export interface WorldRuntime {
 
 export function createRuntime(): WorldRuntime {
   return {
+    impact: {
+      serial: 0,
+      active: false,
+      quiet: false,
+      age: 0,
+      pointer: { x: 0.32, y: 0.18 },
+    },
     skyTime: 0,
     scene: 0,
     travel: {

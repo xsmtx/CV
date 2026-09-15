@@ -1,5 +1,6 @@
 import type { LabState } from "@/components/scenes/lab";
 import { FallbackSkyEvents } from "./fallback-sky-events";
+import type { ImpactPhase } from "@/experience/meteor";
 
 export function FallbackWorld({
   scene,
@@ -8,6 +9,8 @@ export function FallbackWorld({
   lab,
   still,
   motion,
+  impactSerial,
+  impactPhase,
 }: {
   scene: number;
   system: number;
@@ -15,6 +18,8 @@ export function FallbackWorld({
   lab: LabState;
   still: boolean;
   motion?: "arriving" | "departing";
+  impactSerial: number;
+  impactPhase: ImpactPhase;
 }) {
   const isLab = scene === 4;
   return (
@@ -75,6 +80,17 @@ export function FallbackWorld({
         )}
         <span className="fallback-satellite satellite-one" />
         <span className="fallback-satellite satellite-two" />
+        {scene === 0 && impactPhase !== "idle" && (
+          <div
+            key={impactSerial}
+            className={`fallback-impact ${impactPhase === "quiet" ? "is-quiet" : ""}`}
+          >
+            <i className="impact-meteor" />
+            <i className="impact-heat" />
+            <i className="impact-wave" />
+            <i className="impact-sparks" />
+          </div>
+        )}
       </div>
     </div>
   );

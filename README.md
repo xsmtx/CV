@@ -6,6 +6,8 @@
 
 - Home, Systems, Experience, Projects, Lab ve Contact sahneleri.
 - Yumuşak kamera geçişleri ve sürüklenebilen üç boyutlu modeller.
+- Gerçek kıyı çizgileri, okyanuslar, bulutlar ve atmosfer katmanıyla Dünya görünümü.
+- Home sahnesinde tıklamayla gelen meteor, yüzeyde çarpma dalgası ve kıvılcımlar.
 - Yıldızlar, bulutsular, kayan yıldızlar, küçük kozmik patlamalar ve Gargantua görselleştirmesi.
 - Sistem tercihini izleyen, kullanıcı seçimini saklayan açık/koyu tema.
 - Dar ve kısa ekranlara uyarlanan yerleşim; uzun içeriklerde yerel kaydırma.
@@ -54,6 +56,8 @@ Sunucuya özgü bağlantı bilgileri ve dağıtım yapılandırmaları bu depoda
 - **G** basılı tutma: çekirdeğin yapısal çizgileri.
 - **?** veya **H**: yardım.
 - Arka planı sürükleme: modelin açısını değiştirme.
+- Home sahnesinde dünyaya/boş alana sol tıklama, dokunma veya **M**: meteor gönderme. Sürükleme meteor başlatmaz; aynı anda tek çarpma oynatılır.
+- Hareket durdurulduğunda veya azaltılmış hareket tercihinde meteor yerine kısa, sabit bir yüzey parıltısı gösterilir.
 - Güneş/ay düğmesi: tema değiştirme.
 - Durdurma düğmesi: hareketi durdurma/devam ettirme.
 - **Text view**: tam metin profili.
@@ -99,6 +103,7 @@ Yerel önizleme açıkken ek görsel ve performans kontrolleri:
 ```sh
 npm run test:qa
 node scripts/cosmos-qa.mjs
+node scripts/earth-impact-qa.mjs
 node scripts/check-sky-numerics.mjs
 node scripts/performance-qa.mjs
 ```
@@ -107,6 +112,8 @@ node scripts/performance-qa.mjs
 
 ## Varlıklar ve depo kapsamı
 
-Görseller prosedürel geometri, GLSL, CSS ve SVG ile oluşturulur. Font lisansları `public/assets/licenses/` içindedir. SVG varlıklarını yeniden üretmek için `scripts/generate-cosmos.mjs` ve `scripts/generate-gargantua.mjs` kullanılabilir.
+Görseller geometri, GLSL, CSS ve SVG ile oluşturulur. Dünya'nın kıyı çizgileri, [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) tarafından kamuya açık olarak sunulan 1:110m kara verisini kullanır. Bulutlar, yüzey renkleri, atmosfer ve çarpma efektleri kod ile üretilir. Veri kaynağı ve font lisansları `public/assets/licenses/` içindedir.
+
+SVG varlıklarını yeniden üretmek için `scripts/generate-cosmos.mjs`, `scripts/generate-gargantua.mjs` ve `scripts/generate-earth.mjs` kullanılabilir. Dünya üreticisi, depoda bulunan `scripts/data/ne_110m_land.geojson` dosyasından iki yerel SVG üretir; site çalışırken dışarıdan görsel indirmez.
 
 `.gitignore`; bağımlılıkları, derleme çıktılarını, test raporlarını, kişisel kaynak belgelerini, referans ekran görüntülerini, ortam dosyalarını, özel anahtarları, sunucu yapılandırmalarını ve yedek arşivlerini dışarıda tutar. Depoda uygulamanın çalışması için gereken kaynak kod, yapılandırmalar, kilit dosyası ve genel site varlıkları bulunur.

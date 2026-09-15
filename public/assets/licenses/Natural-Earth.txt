@@ -1,0 +1,11 @@
+Made with Natural Earth.
+
+Earth coastlines are derived from Natural Earth's 1:110m physical land data.
+The source dataset is public domain. Colors, clouds, lighting and effects
+are created by this project's shaders.
+
+Source:
+https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson
+
+Terms:
+https://www.naturalearthdata.com/about/terms-of-use/

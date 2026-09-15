@@ -1,19 +1,25 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { seededRandom, type WorldRuntime } from "@/experience/runtime";
 import { MineralBody, mineralGeometry } from "./mineral";
 import { LightFlare } from "@/experience/effects/light-flare";
 import { Orbit } from "./primitives";
+import { Earth } from "./earth";
+import type { Theme } from "@/lib/theme";
 
 export function Core({
   runtime,
   compact = false,
+  earth = false,
+  theme = "dark",
 }: {
   runtime: WorldRuntime;
   compact?: boolean;
+  earth?: boolean;
+  theme?: Theme;
 }) {
   const body = useRef<THREE.Group>(null);
   const orbiters = useRef<THREE.Group>(null);
@@ -69,7 +75,17 @@ export function Core({
   return (
     <group>
       <group ref={body} rotation={[0.2, 0.5, -0.12]}>
-        <MineralBody runtime={runtime} small={compact} warm={compact ? 1 : 0} />
+        {earth ? (
+          <Suspense fallback={<MineralBody runtime={runtime} />}>
+            <Earth runtime={runtime} theme={theme} />
+          </Suspense>
+        ) : (
+          <MineralBody
+            runtime={runtime}
+            small={compact}
+            warm={compact ? 1 : 0}
+          />
+        )}
       </group>
       <Orbit radius={2.72} tilt={[1.15, 0.3, -0.26]} opacity={0.42} />
       <Orbit radius={3.12} tilt={[1.13, 0.3, -0.26]} opacity={0.14} />

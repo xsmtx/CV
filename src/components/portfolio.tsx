@@ -17,6 +17,7 @@ import {
 } from "@/experience/runtime";
 import { usePageVisible, useReducedMotion } from "@/hooks/use-preferences";
 import { useTheme } from "@/hooks/use-theme";
+import { useMeteorImpact } from "@/hooks/use-meteor-impact";
 import { ThemeToggle } from "./ui/theme-toggle";
 import { OrbitMap } from "./navigation/orbit-map";
 import { Telemetry } from "./hud/telemetry";
@@ -60,12 +61,18 @@ export function Portfolio() {
   const reducedMotion = useReducedMotion();
   const pageVisible = usePageVisible();
   const theme = useTheme();
+  const impact = useMeteorImpact(runtime);
+  const sendMeteor = impact.request;
   const root = useRef<HTMLDivElement>(null);
   const transitionEnd = useRef(0);
   const transitionTimers = useRef({ departure: 0, arrival: 0 });
-  const drag = useRef<{ x: number; y: number; lastX: number; active: boolean }>(
-    { x: 0, y: 0, lastX: 0, active: false },
-  );
+  const drag = useRef<{
+    x: number;
+    y: number;
+    lastX: number;
+    distance: number;
+    active: boolean;
+  }>({ x: 0, y: 0, lastX: 0, distance: 0, active: false });
 
   const selectSystem = useCallback(
     (index: number) => {
@@ -287,6 +294,10 @@ export function Portfolio() {
         runtime.wireframe = true;
         return;
       }
+      if (event.key.toLowerCase() === "m" && !event.repeat) {
+        sendMeteor();
+        return;
+      }
       if (event.key === "Escape") {
         openProject(false);
         setHelpOpen(false);
@@ -344,14 +355,21 @@ export function Portfolio() {
       window.removeEventListener("keyup", keyup);
       window.removeEventListener("blur", blur);
     };
-  }, [runtime, navigate, selectTimeline, selectProject, openProject]);
+  }, [
+    runtime,
+    navigate,
+    selectTimeline,
+    selectProject,
+    openProject,
+    sendMeteor,
+  ]);
 
   const updateLab = (value: LabState) => {
     runtime.lab = value;
     setLab(value);
   };
   const still = paused || reducedMotion;
-  const revision = `${scene}-${system}-${timeline}-${project}-${projectOpen}-${lab.rate}-${lab.topology}-${lab.running}-${still}-${theme}`;
+  const revision = `${scene}-${system}-${timeline}-${project}-${projectOpen}-${lab.rate}-${lab.topology}-${lab.running}-${still}-${theme}-${impact.serial}-${impact.phase}`;
 
   return (
     <div
@@ -375,33 +393,55 @@ export function Portfolio() {
       </a>
       <div
         className="world-layer"
-        data-cursor="DRAG"
+        data-cursor={scene === 0 ? "CLICK / DRAG" : "DRAG"}
+        data-impact-phase={impact.phase}
+        data-impact-count={impact.serial}
         onPointerMove={(event) => {
           runtime.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
           runtime.pointer.y = (event.clientY / window.innerHeight) * 2 - 1;
           if (drag.current.active) {
+            drag.current.distance = Math.max(
+              drag.current.distance,
+              Math.hypot(
+                event.clientX - drag.current.x,
+                event.clientY - drag.current.y,
+              ),
+            );
             runtime.drag += (event.clientX - drag.current.lastX) * 0.012;
             drag.current.lastX = event.clientX;
           }
         }}
         onPointerDown={(event) => {
+          if (event.button !== 0 || !event.isPrimary) return;
           drag.current = {
             x: event.clientX,
             y: event.clientY,
             lastX: event.clientX,
+            distance: 0,
             active: true,
           };
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
         onPointerUp={(event) => {
+          if (!drag.current.active || event.button !== 0) return;
+          const dx = event.clientX - drag.current.x;
           const dy = event.clientY - drag.current.y;
           if (
             event.pointerType === "touch" &&
             Math.abs(dy) > 65 &&
-            Math.abs(dy) > Math.abs(event.clientX - drag.current.x)
+            Math.abs(dy) > Math.abs(dx)
           )
             navigate(scene + (dy < 0 ? 1 : -1));
+          else if (Math.max(drag.current.distance, Math.hypot(dx, dy)) <= 6) {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            impact.request(
+              ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+              1 - ((event.clientY - bounds.top) / bounds.height) * 2,
+            );
+          }
           drag.current.active = false;
+          if (event.currentTarget.hasPointerCapture(event.pointerId))
+            event.currentTarget.releasePointerCapture(event.pointerId);
         }}
         onPointerCancel={() => {
           drag.current.active = false;
@@ -416,6 +456,8 @@ export function Portfolio() {
               project={project}
               lab={lab}
               still={still || !pageVisible}
+              impactSerial={impact.serial}
+              impactPhase={impact.phase}
               motion={
                 index === departure
                   ? "departing"
@@ -591,6 +633,8 @@ export function Portfolio() {
             <dd>Explore years or projects</dd>
             <dt>Drag the world</dt>
             <dd>Change your perspective</dd>
+            <dt>Click the world / M</dt>
+            <dd>Send a meteor to Earth on Home</dd>
             <dt>Hold G</dt>
             <dd>Reveal the core’s structure</dd>
             <dt>Escape</dt>

@@ -152,7 +152,7 @@ function Scene({
       <CameraRig runtime={runtime} mobile={mobile} />
       <SceneAnchor index={0} runtime={runtime}>
         <group position={[1.4, 0.15, 0]}>
-          <Core runtime={runtime} />
+          <Core runtime={runtime} earth theme={theme} />
         </group>
       </SceneAnchor>
       <DistantField />

@@ -1,0 +1,112 @@
+# Samet Kabakcı — Spatial Portfolio
+
+[sametkabakci.com](https://sametkabakci.com) için geliştirilen, altı bağlantılı sahneden oluşan kişisel portfolyo. Next.js, React, TypeScript, Three.js ve React Three Fiber kullanır. Gezegenler, altyapı modelleri ve kozmik arka plan kod ile oluşturulur.
+
+## Özellikler
+
+- Home, Systems, Experience, Projects, Lab ve Contact sahneleri.
+- Yumuşak kamera geçişleri ve sürüklenebilen üç boyutlu modeller.
+- Yıldızlar, bulutsular, kayan yıldızlar, küçük kozmik patlamalar ve Gargantua görselleştirmesi.
+- Sistem tercihini izleyen, kullanıcı seçimini saklayan açık/koyu tema.
+- Dar ve kısa ekranlara uyarlanan yerleşim; uzun içeriklerde yerel kaydırma.
+- Manrope ve Source Sans 3 fontlarının yerel sunumu.
+- Uyarlanabilir grafik kalitesi, hareketi durdurma ve azaltılmış hareket desteği.
+- WebGL olmadığında CSS/SVG görünümü; JavaScript olmadan okunabilen `/profile/` sayfası.
+
+## Yerel geliştirme
+
+Node.js 24 önerilir; proje bu sürümde doğrulanmıştır. API anahtarı, veritabanı veya özel ortam dosyası gerektirmez.
+
+```sh
+git clone https://github.com/xsmtx/CV.git
+cd CV
+npm ci
+npm run dev
+```
+
+Geliştirme sunucusu: **http://localhost:3000**
+
+## Derleme ve yayın
+
+```sh
+npm run build
+npm start
+```
+
+Derleme, statik siteyi `out/` klasörüne üretir. `npm start` bu çıktıyı yerelde 3000 portunda önizler. Portu `PORT` ortam değişkeniyle değiştirebilirsiniz:
+
+```powershell
+$env:PORT = '4173'
+npm start
+```
+
+Statik barındırma için `out/` klasörünün içeriğini yayınlayın. `/profile/` ayrı bir HTML dizinidir; `404.html` özel hata sayfasıdır. HTML dosyaları yeniden doğrulanmalı, hash içeren `/_next/static/` varlıkları uzun süre önbelleğe alınmalıdır. E-posta kopyalama için HTTPS kullanın.
+
+Sunucuya özgü bağlantı bilgileri ve dağıtım yapılandırmaları bu depoda tutulmaz.
+
+## Kontroller
+
+- Yörünge haritası veya **1–6**: sahne seçimi.
+- Kaydırma, **↑ / ↓**, **Page Up / Page Down**: sahneler arasında geçiş.
+- **← / →**: Experience içinde yıl, Projects içinde proje seçimi.
+- **Home / End**: başlangıç veya iletişim sahnesi.
+- **Escape**: proje ayrıntısını veya yardım panelini kapatma.
+- **G** basılı tutma: çekirdeğin yapısal çizgileri.
+- **?** veya **H**: yardım.
+- Arka planı sürükleme: modelin açısını değiştirme.
+- Güneş/ay düğmesi: tema değiştirme.
+- Durdurma düğmesi: hareketi durdurma/devam ettirme.
+- **Text view**: tam metin profili.
+
+## İçerik ve proje yapısı
+
+| Konum                    | Görevi                                               |
+| ------------------------ | ---------------------------------------------------- |
+| `src/data/profile.ts`    | Profil, e-posta, sosyal bağlantılar ve eğitim        |
+| `src/data/experience.ts` | İş geçmişi ve sorumluluklar                          |
+| `src/data/systems.ts`    | Teknoloji alanları ve deneyim düzeyleri              |
+| `src/data/projects.ts`   | Proje açıklamaları ve mimari ayrıntılar              |
+| `src/app/`               | Statik sayfalar, metadata, robots ve sitemap         |
+| `src/components/`        | Okunabilir içerik, navigasyon ve kontroller          |
+| `src/experience/`        | Kamera, modeller, animasyonlar ve shader'lar         |
+| `src/styles/`            | Tema, tipografi ve responsive düzenler               |
+| `public/assets/`         | Paylaşım görseli, SVG gökyüzü ve font lisansları     |
+| `scripts/`               | Yerel önizleme, görsel üretimi ve doğrulama araçları |
+| `tests/`                 | Playwright etkileşim ve erişilebilirlik testleri     |
+
+İçerik dosyalarını mevcut veri şemasını koruyarak düzenleyin. Alan adı değişirse profil, robots ve sitemap yapılandırmalarını da güncelleyin. Yeni sahne, proje veya kariyer durağı eklerken ilgili gezinme sınırlarını ve model eşlemelerini kontrol edin.
+
+## Doğrulama
+
+```sh
+npm run build
+npm run lint
+npm run typecheck
+npm test
+```
+
+Playwright yapılandırması kurulu Chrome/Edge kanallarını ve Playwright Firefox/WebKit motorlarını kullanır:
+
+```sh
+npx playwright install firefox webkit
+npx playwright test --project=chrome --project=webkit
+```
+
+Chrome/Edge bulunmayan ortamlarda ilgili `channel` ayarını kaldırıp Playwright Chromium kurulabilir. Playwright testleri 4173 portundaki üretim önizlemesini otomatik başlatır veya mevcut önizlemeyi kullanır.
+
+Yerel önizleme açıkken ek görsel ve performans kontrolleri:
+
+```sh
+npm run test:qa
+node scripts/cosmos-qa.mjs
+node scripts/check-sky-numerics.mjs
+node scripts/performance-qa.mjs
+```
+
+`check-sky-numerics.mjs`, yıldız animasyonlarını gerçek GPU üzerinde farklı ekran oranları ve hassasiyetlerle ölçerek geçersiz renkleri kontrol eder. Raporlar ve ekran görüntüleri `qa/` altında yerelde tutulur.
+
+## Varlıklar ve depo kapsamı
+
+Görseller prosedürel geometri, GLSL, CSS ve SVG ile oluşturulur. Font lisansları `public/assets/licenses/` içindedir. SVG varlıklarını yeniden üretmek için `scripts/generate-cosmos.mjs` ve `scripts/generate-gargantua.mjs` kullanılabilir.
+
+`.gitignore`; bağımlılıkları, derleme çıktılarını, test raporlarını, kişisel kaynak belgelerini, referans ekran görüntülerini, ortam dosyalarını, özel anahtarları, sunucu yapılandırmalarını ve yedek arşivlerini dışarıda tutar. Depoda uygulamanın çalışması için gereken kaynak kod, yapılandırmalar, kilit dosyası ve genel site varlıkları bulunur.

@@ -1,0 +1,254 @@
+/* Theme surfaces follow the same composition and readable type scale. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --void: #edf1f3;
+  --graphite: #e1e7eb;
+  --white: #18242e;
+  --muted: #4c5b67;
+  --line: #bac5ca;
+  --amber: #9b5b26;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--white);
+  background: var(--void);
+  transition:
+    border-color 180ms,
+    color 180ms,
+    background-color 180ms;
+}
+.theme-toggle:hover {
+  color: var(--amber);
+  border-color: var(--amber);
+}
+.theme-toggle svg {
+  grid-area: 1 / 1;
+  width: 20px;
+  height: 20px;
+}
+.theme-moon,
+[data-theme="light"] .theme-sun {
+  display: none;
+}
+[data-theme="light"] .theme-moon {
+  display: block;
+}
+.portfolio .local-time {
+  right: calc(var(--edge) + 300px);
+}
+
+[data-theme="light"] .portfolio .space-vignette {
+  background:
+    linear-gradient(
+      90deg,
+      #edf1f3f5,
+      #edf1f3f5 38%,
+      #edf1f3c7 50%,
+      #edf1f330 65%,
+      transparent 75%
+    ),
+    linear-gradient(270deg, #edf1f3e6, #edf1f3b3 12%, transparent 27%),
+    linear-gradient(
+      0deg,
+      #edf1f3f2,
+      transparent 23%,
+      transparent 78%,
+      #edf1f3cc
+    );
+}
+[data-theme="light"] .space-grain {
+  opacity: 0.018;
+  mix-blend-mode: multiply;
+}
+[data-theme="light"]
+  .portfolio
+  :is(
+    .domain-detail,
+    .career-detail,
+    .project-content,
+    .lab-description,
+    .lab-controls
+  ) {
+  background: linear-gradient(90deg, #edf1f3f5, #edf1f3eb 75%, #edf1f3b8);
+  text-shadow: none;
+}
+[data-theme="light"]
+  .portfolio
+  :is(.home-introduction > p, .scene-intro, .contact-intro) {
+  text-shadow: none;
+}
+[data-theme="light"] :is(.home-introduction > p:first-child, .career-company) {
+  color: var(--white);
+}
+[data-theme="light"]
+  :is(
+    .technology-list,
+    .project-architecture p,
+    .coordinates,
+    .edition,
+    .world-annotation,
+    .world-annotation div > span,
+    .orbit-caption > span:last-child,
+    .orbit-help,
+    .system-node-number,
+    .timeline-scrubber button,
+    .timeline-scrubber small,
+    .project-index button > span:first-child,
+    .segmented-control button,
+    .contact-signoff
+  ) {
+  color: var(--muted);
+}
+[data-theme="light"]
+  :is(
+    .timeline-scrubber button.active,
+    .segmented-control button[aria-pressed="true"]
+  ) {
+  color: var(--white);
+}
+[data-theme="light"]
+  :is(
+    .system-node.selected .system-node-number,
+    .project-index button.selected > span:first-child
+  ) {
+  color: var(--amber);
+}
+[data-theme="light"]
+  :is(
+    .system-node,
+    .project-index button,
+    .domain-detail,
+    .career-detail,
+    .project-content,
+    .lab-controls,
+    .contact-links,
+    .segmented-control button,
+    .lab-toggle
+  ) {
+  border-color: var(--line);
+}
+[data-theme="light"] .segmented-control button[aria-pressed="true"] {
+  border-color: var(--amber);
+  background: #9b5b260c;
+}
+[data-theme="light"] .controls-help {
+  background: #f9fbfcfa;
+  border-color: var(--line);
+  box-shadow: 0 12px 48px #18242e1a;
+}
+[data-theme="light"] .era-year {
+  color: #edf1f3;
+  -webkit-text-stroke: 1px #4c5b67;
+  paint-order: stroke fill;
+}
+[data-theme="light"] .journey-progress {
+  background: var(--line);
+}
+[data-theme="light"] .timeline-track {
+  background: linear-gradient(90deg, #bac5ca, #788b97);
+}
+[data-theme="light"] .timeline-point {
+  background: var(--void);
+}
+[data-theme="light"] .timeline-scrubber button.active .timeline-point {
+  background: var(--amber);
+  box-shadow:
+    0 0 0 5px #9b5b2610,
+    0 0 0 6px #9b5b2640;
+}
+[data-theme="light"] .precision-reticle {
+  border-color: #4c5b6780;
+}
+[data-theme="light"] .portfolio .orbit-boundary,
+[data-theme="light"] .portfolio .orbit-axis {
+  stroke: #657b8b60;
+}
+[data-theme="light"] .portfolio .orbit-vector {
+  stroke: var(--amber);
+}
+[data-theme="light"] .portfolio .orbit-center {
+  fill: var(--amber);
+}
+[data-theme="light"] .portfolio .orbit-center-outline {
+  stroke: #9b5b2680;
+}
+[data-theme="light"] :is(.fallback-world, .no-script) {
+  background: var(--void);
+}
+[data-theme="light"] .fallback-distant-field {
+  opacity: 0.7;
+}
+[data-theme="light"] .fallback-ring {
+  border-color: #637b8c66;
+}
+[data-theme="light"] .fallback-planet {
+  box-shadow:
+    inset -12px 6px 30px #cad7de66,
+    0 0 55px #8b9ea233;
+}
+[data-theme="light"] [data-scroll-panel] {
+  scrollbar-color: #788b97 transparent;
+}
+
+@media (min-width: 1400px) and (min-height: 721px) {
+  [data-theme="light"] .portfolio .contact-intro {
+    top: 40%;
+  }
+}
+@media (min-width: 900px) and (max-width: 1399px),
+  (min-width: 900px) and (max-height: 720px) {
+  [data-theme="light"] .portfolio .space-vignette {
+    background:
+      linear-gradient(
+        90deg,
+        #edf1f3fa,
+        #edf1f3db 43%,
+        #edf1f388 68%,
+        #edf1f3b3
+      ),
+      linear-gradient(0deg, #edf1f3, transparent 28%, transparent 75%, #edf1f3);
+  }
+}
+@media (max-width: 899px) {
+  .portfolio .local-time {
+    right: calc(var(--edge) + 64px);
+    top: 37px;
+  }
+  .header-actions {
+    gap: 16px;
+  }
+  [data-theme="light"] .portfolio .space-vignette {
+    background:
+      linear-gradient(90deg, #edf1f3e6, #edf1f3b3),
+      linear-gradient(
+        0deg,
+        #edf1f3 12%,
+        #edf1f3a6 42%,
+        #edf1f344 70%,
+        #edf1f3bb
+      );
+  }
+  [data-theme="light"]
+    .portfolio
+    :is(
+      .domain-detail,
+      .career-detail,
+      .project-content,
+      .lab-description,
+      .lab-controls
+    ) {
+    background: none;
+  }
+}

@@ -1,0 +1,72 @@
+# Dependencies and generated output
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Local test output, screenshots and diagnostics
+qa/
+test-results/
+playwright-report/
+blob-report/
+.eslint-results.json
+*.log
+/*.png
+/*.jpg
+/*.jpeg
+*.webm
+*.mp4
+
+# Environment, credentials and private keys
+.env*
+!.env.example
+.npmrc
+.ssh/
+secrets/
+credentials/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa*
+id_ed25519*
+
+# Personal source documents and private working notes
+*.doc
+*.docx
+*.pdf
+/AGENTS.md
+/CLAUDE.md
+/DESIGN.md
+/QA.md
+/master_handoff.md
+.codex/
+.claude/
+
+# Server-specific operations, releases and backups
+/deploy/
+/scripts/deployment-qa.mjs
+.releases/
+.backups/
+backups/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.bak
+*.old
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo

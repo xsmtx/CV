@@ -66,7 +66,7 @@ Sunucuya özgü bağlantı bilgileri ve dağıtım yapılandırmaları bu depoda
 
 ## Portfolio terminal
 
-`help` komutları listeler. `whoami` adı ve rolü, `uptime` İstanbul takvimine göre yaşı İngilizce `years / months / days` olarak, `uptime --session` tarayıcı oturum süresini gösterir. `skills linux`, `projects scb`, `experience`, `neofetch` ve `contact` profil verilerini okur. `theme light`, `theme dark` ve `open projects` siteyi kontrol eder.
+`help` komutları listeler. `pwd` şehir ve ülkeyi İngilizce gösterir. `whoami` adı ve rolü, `uptime` İstanbul takvimine göre yaşı İngilizce `years / months / days` olarak, `uptime --session` tarayıcı oturum süresini gösterir. `skills linux`, `projects scb`, `experience`, `neofetch` ve `contact` profil verilerini okur. `theme light`, `theme dark` ve `open projects` siteyi kontrol eder.
 
 `curl CV` veya `wget CV`, Samet'in hazırladığı orijinal Word CV'yi indirir. ↑/↓ komut geçmişi, Tab tek eşleşmeyi tamamlama, Ctrl+L temizleme, Esc kapatma içindir. Bu komutlar tarayıcıdaki profil arayüzüne aittir; sunucuda kabuk komutları çalıştırılmaz.
 

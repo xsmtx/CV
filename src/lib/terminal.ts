@@ -146,7 +146,7 @@ export function executeCommand(
   switch (command) {
     case "help":
       return {
-        text: `SAMET / PORTFOLIO SHELL\nExplore my work through familiar commands.\n\nwhoami             Name and role\nuptime             Age in calendar years, months and days\nuptime --session   Time in this browser session\nneofetch           Profile overview\nskills [domain]    Technical skills and experience levels\nprojects [id]      Projects and architecture\nexperience         Career timeline\ncontact            Public contact details\nls / pwd / cat     Browse the profile files\ncurl CV            Download my CV as a Word document\nstatus             Current browser and scene status\ndate               Local time in Izmir\ntheme dark|light   Change the site's theme\nopen <space>       Travel to a space\nhistory            Commands in this session\nclear / exit       Clear the screen or close the terminal\n\nTry: skills linux · projects scb · cat about.txt\nSpaces: ${scenes.map((s) => s.id).join(", ")}\n\n↑ ↓ history · Tab completes a unique match\nCtrl+L clears · Ctrl+C cancels input · Esc closes`,
+        text: `SAMET / PORTFOLIO SHELL\nExplore my work through familiar commands.\n\nwhoami             Name and role\nuptime             Age in calendar years, months and days\nuptime --session   Time in this browser session\nneofetch           Profile overview\nskills [domain]    Technical skills and experience levels\nprojects [id]      Projects and architecture\nexperience         Career timeline\ncontact            Public contact details\npwd                My city and country\nls / cat           Browse the profile files\ncurl CV            Download my CV as a Word document\nstatus             Current browser and scene status\ndate               Local time in Izmir\ntheme dark|light   Change the site's theme\nopen <space>       Travel to a space\nhistory            Commands in this session\nclear / exit       Clear the screen or close the terminal\n\nTry: skills linux · projects scb · cat about.txt\nSpaces: ${scenes.map((s) => s.id).join(", ")}\n\n↑ ↓ history · Tab completes a unique match\nCtrl+L clears · Ctrl+C cancels input · Esc closes`,
       };
     case "whoami":
       return { text: `${profile.fullName}\n${profile.title}` };
@@ -181,7 +181,7 @@ export function executeCommand(
           }
         : usage("uname -a");
     case "pwd":
-      return { text: "/home/samet/portfolio" };
+      return { text: profile.location };
     case "ls":
       if (!arg || arg === "." || arg === "~")
         return {

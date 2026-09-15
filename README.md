@@ -62,6 +62,22 @@ Sunucuya özgü bağlantı bilgileri ve dağıtım yapılandırmaları bu depoda
 - Güneş/ay düğmesi: tema değiştirme.
 - Durdurma düğmesi: hareketi durdurma/devam ettirme.
 - **Text view**: tam metin profili.
+- **T**, alt çubuktaki **Terminal** veya LAB içindeki **Open terminal**: etkileşimli terminal.
+
+## Portfolio terminal
+
+`help` komutları listeler. `whoami` adı ve rolü, `uptime` İstanbul takvimine göre yaşı yıl/ay/gün olarak, `uptime --session` tarayıcı oturum süresini gösterir. `skills linux`, `projects scb`, `experience`, `neofetch` ve `contact` profil verilerini okur. `theme light`, `theme dark` ve `open projects` siteyi kontrol eder.
+
+`curl CV` veya `wget CV`, herkese açık PDF CV'yi indirir. ↑/↓ komut geçmişi, Tab tek eşleşmeyi tamamlama, Ctrl+L temizleme, Esc kapatma içindir. Bu komutlar tarayıcıdaki profil arayüzüne aittir; sunucuda kabuk komutları çalıştırılmaz.
+
+CV, `public/downloads/Samet-Kabakci-CV.pdf` konumundadır; metin görünümünden de indirilebilir. Genel profil verileri güncellendikten sonra PDF'yi yeniden üretmek için:
+
+```sh
+python -m pip install reportlab
+node scripts/generate-cv.mjs
+```
+
+Üretici Windows'ta Arial, Linux'ta DejaVu Sans kullanır (`CV_FONT_DIR` ile font klasörü değiştirilebilir). PDF'yi yayınlamadan önce iki sayfanın düzenini kontrol edin. Orijinal Word belgesi ve diğer kişisel belgeler `.gitignore` kapsamında kalır; yalnızca bu genel PDF için istisna vardır.
 
 ## İçerik ve proje yapısı
 

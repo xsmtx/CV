@@ -10,10 +10,12 @@ export function Lab({
   state,
   update,
   reducedMotion,
+  openTerminal,
 }: {
   state: LabState;
   update: (state: LabState) => void;
   reducedMotion: boolean;
+  openTerminal: () => void;
 }) {
   return (
     <div className="scene-composition lab-composition">
@@ -34,6 +36,18 @@ export function Lab({
         <p className="lab-note">
           An infrastructure visualization built for this space.
         </p>
+        <div className="lab-terminal-entry">
+          <p>Prefer the command line? Explore my skills, projects and CV.</p>
+          <button
+            onClick={(event) => {
+              event.currentTarget.focus({ preventScroll: true });
+              openTerminal();
+            }}
+          >
+            <span aria-hidden="true">&gt;_</span> Open terminal{" "}
+            <span aria-hidden="true">↗</span>
+          </button>
+        </div>
       </div>
       <div className="lab-controls" data-scroll-panel>
         <fieldset>

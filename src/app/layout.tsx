@@ -7,6 +7,7 @@ import "@/styles/themes.css";
 import "@/styles/cosmos.css";
 import "@/styles/reading-panels.css";
 import "@/styles/earth.css";
+import "@/styles/terminal.css";
 import { profile } from "@/data/profile";
 import { themeBootstrap } from "@/lib/theme";
 import { ThemeColor } from "@/components/ui/theme-toggle";

@@ -18,6 +18,7 @@ const types = {
   ".woff2": "font/woff2",
   ".woff": "font/woff",
   ".ico": "image/x-icon",
+  ".pdf": "application/pdf",
 };
 const cache = new Map();
 const server = http.createServer(async (req, res) => {

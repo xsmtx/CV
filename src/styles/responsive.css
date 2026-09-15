@@ -525,7 +525,7 @@
     height: 32px;
     width: 25px;
   }
-  .portfolio .footer-controls > button:first-of-type {
+  .portfolio .footer-controls > button[aria-controls="controls-help"] {
     display: none;
   }
   .portfolio .control-divider {

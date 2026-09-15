@@ -5,6 +5,7 @@ import { experience } from "@/data/experience";
 import { systems } from "@/data/systems";
 import { projects } from "@/data/projects";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { terminalProfile } from "@/data/terminal";
 
 export const metadata: Metadata = {
   title: "Profile, experience & projects",
@@ -33,6 +34,9 @@ export default function ProfilePage() {
         <p>{profile.location}</p>
         <p className="profile-summary">{profile.about}</p>
         <nav aria-label="Profile sections">
+          <a href={terminalProfile.cvUrl} download={terminalProfile.cvFilename}>
+            Download CV (PDF)
+          </a>
           <a href="#expertise">Systems</a>
           <a href="#career">Experience</a>
           <a href="#work">Projects</a>

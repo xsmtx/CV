@@ -35,6 +35,7 @@ const SceneCanvas = dynamic(() => import("@/experience/scene-canvas"), {
   ssr: false,
   loading: () => null,
 });
+const Terminal = dynamic(() => import("./terminal/terminal"), { ssr: false });
 
 export function Portfolio() {
   const runtime = useMemo(() => createRuntime(), []);
@@ -58,6 +59,13 @@ export function Portfolio() {
     running: true,
   });
   const [helpOpen, setHelpOpen] = useState(false);
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const [terminalLoaded, setTerminalLoaded] = useState(false);
+  const showTerminal = useCallback(() => {
+    setHelpOpen(false);
+    setTerminalLoaded(true);
+    setTerminalOpen(true);
+  }, []);
   const reducedMotion = useReducedMotion();
   const pageVisible = usePageVisible();
   const theme = useTheme();
@@ -230,6 +238,7 @@ export function Portfolio() {
     let accumulated = 0;
     let lastWheel = 0;
     const wheel = (event: WheelEvent) => {
+      if (terminalOpen) return;
       if (event.ctrlKey || event.metaKey) return;
       let panel = (event.target as HTMLElement).closest<HTMLElement>(
         "[data-scroll-panel]",
@@ -268,6 +277,7 @@ export function Portfolio() {
       } else navigate(runtime.scene + direction);
     };
     const keydown = (event: KeyboardEvent) => {
+      if (terminalOpen) return;
       if (
         event.ctrlKey ||
         event.metaKey ||
@@ -277,6 +287,11 @@ export function Portfolio() {
         )
       )
         return;
+      if (event.key.toLowerCase() === "t" && !event.repeat) {
+        event.preventDefault();
+        showTerminal();
+        return;
+      }
       if (
         (event.target as HTMLElement).matches("[data-scroll-panel]") &&
         [
@@ -362,6 +377,8 @@ export function Portfolio() {
     selectProject,
     openProject,
     sendMeteor,
+    terminalOpen,
+    showTerminal,
   ]);
 
   const updateLab = (value: LabState) => {
@@ -555,7 +572,12 @@ export function Portfolio() {
                 />
               )}
               {index === 4 && (
-                <Lab state={lab} update={updateLab} reducedMotion={still} />
+                <Lab
+                  state={lab}
+                  update={updateLab}
+                  reducedMotion={still}
+                  openTerminal={showTerminal}
+                />
               )}
               {index === 5 && <Contact />}
             </div>
@@ -589,6 +611,21 @@ export function Portfolio() {
           <span className="location-subtitle">38.4237° N / 27.1428° E</span>
         </div>
         <div className="footer-controls">
+          <button
+            className="terminal-trigger"
+            onClick={(event) => {
+              event.currentTarget.focus({ preventScroll: true });
+              showTerminal();
+            }}
+            aria-label="Open terminal"
+            aria-haspopup="dialog"
+            aria-expanded={terminalOpen}
+          >
+            <span className="terminal-trigger-icon" aria-hidden="true">
+              &gt;_
+            </span>
+            <span className="terminal-trigger-label">TERMINAL</span>
+          </button>
           <a href="/profile/" data-cursor="OPEN">
             TEXT VIEW
           </a>
@@ -635,6 +672,8 @@ export function Portfolio() {
             <dd>Change your perspective</dd>
             <dt>Click the world / M</dt>
             <dd>Send a meteor to Earth on Home</dd>
+            <dt>T / Terminal</dt>
+            <dd>Explore the engineer’s command line</dd>
             <dt>Hold G</dt>
             <dd>Reveal the core’s structure</dd>
             <dt>Escape</dt>
@@ -660,7 +699,17 @@ export function Portfolio() {
           <a href="/profile/">complete text profile</a>.
         </div>
       </noscript>
-      <Cursor disabled={still} />
+      {terminalLoaded && (
+        <Terminal
+          open={terminalOpen}
+          onClose={() => setTerminalOpen(false)}
+          navigate={(id) =>
+            navigate(scenes.findIndex((item) => item.id === id))
+          }
+          runtime={runtime}
+        />
+      )}
+      <Cursor disabled={still || terminalOpen} />
     </div>
   );
 }

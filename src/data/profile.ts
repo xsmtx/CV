@@ -3,7 +3,7 @@ export const profile = {
   fullName: "Samet Kabakçı",
   title: "System Engineer",
   specialization: "Senior Linux Infrastructure Engineer · Cloud & DevOps",
-  location: "İzmir, Türkiye",
+  location: "Izmir, Turkey",
   email: "info@sametkabakci.com",
   linkedin: "https://www.linkedin.com/in/sametkabakci/",
   github: "https://github.com/xsmtx",

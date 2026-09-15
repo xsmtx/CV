@@ -13,7 +13,7 @@ export default function Page() {
     email: profile.email,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "İzmir",
+      addressLocality: "Izmir",
       addressCountry: "TR",
     },
     sameAs: [profile.linkedin, profile.github],

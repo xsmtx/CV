@@ -66,7 +66,7 @@ export function Contact() {
             ? `Select and copy: ${profile.email}`
             : ""}
       </p>
-      <p className="contact-signoff">BASED IN İZMİR. CONNECTED EVERYWHERE.</p>
+      <p className="contact-signoff">BASED IN IZMIR. CONNECTED EVERYWHERE.</p>
     </div>
   );
 }

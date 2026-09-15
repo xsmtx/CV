@@ -35,7 +35,7 @@ export default function ProfilePage() {
         <p className="profile-summary">{profile.about}</p>
         <nav aria-label="Profile sections">
           <a href={terminalProfile.cvUrl} download={terminalProfile.cvFilename}>
-            Download CV (PDF)
+            Download CV (Word)
           </a>
           <a href="#expertise">Systems</a>
           <a href="#career">Experience</a>

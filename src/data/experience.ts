@@ -4,7 +4,7 @@ export const experience = [
     period: "2017–2020",
     role: "Freelance Systems Engineer",
     company: "Independent",
-    location: "İzmir, Türkiye",
+    location: "Izmir, Turkey",
     kind: "Foundations",
     summary:
       "Where software met infrastructure. Linux servers, custom integrations and communication systems for small businesses and technology companies.",
@@ -19,7 +19,7 @@ export const experience = [
     period: "2020–2021",
     role: "Systems Administration Intern",
     company: "Confidential Technology Company",
-    location: "Türkiye",
+    location: "Turkey",
     kind: "Operations",
     summary:
       "Hands-on experience with production infrastructure and enterprise operations. Building practical knowledge through monitoring, maintenance and troubleshooting.",
@@ -34,7 +34,7 @@ export const experience = [
     period: "2021–2026",
     role: "System Administrator",
     company: "Veridyen Information Technologies LTD",
-    location: "İzmir, Türkiye · On-site",
+    location: "Izmir, Turkey · On-site",
     kind: "Scale",
     summary:
       "Production Linux infrastructure supporting thousands of customer websites and applications. Availability, performance and security under real operational pressure.",
@@ -69,7 +69,7 @@ export const experience = [
     period: "2026–Present",
     role: "Systems Administration Team Lead",
     company: "Veridyen Information Technologies LTD",
-    location: "İzmir, Türkiye · On-site",
+    location: "Izmir, Turkey · On-site",
     kind: "Leadership",
     summary:
       "Leading the team. Staying close to the systems. Owning technical escalations and infrastructure reliability while helping other engineers grow.",

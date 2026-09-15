@@ -42,8 +42,23 @@ test("age uses calendar anniversaries and Istanbul midnight", () => {
 
 test("commands use real profile data and restrict actions to portfolio commands", () => {
   expect(executeCommand("uptime", context).text).toContain(
-    "34 yıl · 6 ay · 9 gün",
+    "34 years · 6 months · 9 days",
   );
+  expect(executeCommand("uptime", context).text).toContain(
+    "12,611 days since boot",
+  );
+  expect(
+    executeCommand("uptime", {
+      ...context,
+      now: new Date("2026-04-07T10:00:00Z"),
+    }).text,
+  ).toContain("34 years · 1 month · 1 day");
+  expect(executeCommand("date", context).text).toContain(
+    "Tuesday, 15 September 2026",
+  );
+  expect(executeCommand("help", context).text).toContain("Word document");
+  expect(executeCommand("ls", context).text).toContain("CV.docx");
+  expect(executeCommand("curl CV.docx", context).action?.type).toBe("download");
   expect(executeCommand("uptime --session", context).text).toContain(
     "1h 1m 3s",
   );
@@ -90,7 +105,9 @@ test("keyboard history, completion, clear, focus restoration and scene isolation
   await input.press("Enter");
   await expect(last(page)).toContainText("Samet Kabakçı");
   await run(page, "uptime");
-  await expect(last(page)).toContainText(/\d+ yıl · \d+ ay · \d+ gün/);
+  await expect(last(page)).toContainText(
+    /\d+ years? · \d+ months? · \d+ days?/,
+  );
   await input.fill("draft");
   await input.press("ArrowUp");
   await expect(input).toHaveValue("uptime");
@@ -144,11 +161,11 @@ test("theme and open commands control the site, including the LAB entry", async 
   await expect(page.locator(".lab-terminal-entry button")).toBeFocused();
 });
 
-test("curl CV downloads a valid PDF; HTTP failure can be retried", async ({
+test("curl CV downloads the original Word document; HTTP failure can be retried", async ({
   page,
 }) => {
   await start(page);
-  await page.route("**/downloads/Samet-Kabakci-CV.pdf", (route) =>
+  await page.route("**/downloads/Samet-Kabakci-CV.docx", (route) =>
     route.fulfill({ status: 503, body: "Unavailable" }),
   );
   await run(page, "curl CV");
@@ -157,22 +174,33 @@ test("curl CV downloads a valid PDF; HTTP failure can be retried", async ({
     "aria-busy",
     "false",
   );
-  await page.unroute("**/downloads/Samet-Kabakci-CV.pdf");
+  await page.unroute("**/downloads/Samet-Kabakci-CV.docx");
+  await page.route("**/downloads/Samet-Kabakci-CV.docx", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: "<html>Error</html>",
+    }),
+  );
+  await run(page, "curl CV");
+  await expect(last(page)).toContainText("could not be loaded");
+  await page.unroute("**/downloads/Samet-Kabakci-CV.docx");
   const downloadPromise = page.waitForEvent("download");
   await run(page, "curl CV");
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe("Samet-Kabakci-CV.pdf");
+  expect(download.suggestedFilename()).toBe("Samet-Kabakci-CV.docx");
   const bytes = await readFile((await download.path())!);
-  expect(bytes.subarray(0, 5).toString()).toBe("%PDF-");
-  expect(bytes.length).toBeGreaterThan(20000);
+  expect(bytes).toEqual(
+    await readFile("public/downloads/Samet-Kabakci-CV.docx"),
+  );
   await expect(last(page)).toContainText("Download requested");
   await expect(
-    page.getByRole("link", { name: "Download PDF again" }),
+    page.getByRole("link", { name: "Download Word document again" }),
   ).toBeVisible();
   await page.goto("/profile/");
   await expect(
-    page.getByRole("link", { name: "Download CV (PDF)" }),
-  ).toHaveAttribute("href", "/downloads/Samet-Kabakci-CV.pdf");
+    page.getByRole("link", { name: "Download CV (Word)" }),
+  ).toHaveAttribute("href", "/downloads/Samet-Kabakci-CV.docx");
 });
 
 test("both themes pass accessibility checks and compact layouts keep the command visible", async ({

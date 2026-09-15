@@ -19,6 +19,8 @@ const types = {
   ".woff": "font/woff",
   ".ico": "image/x-icon",
   ".pdf": "application/pdf",
+  ".docx":
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 const cache = new Map();
 const server = http.createServer(async (req, res) => {

@@ -607,7 +607,7 @@ export function Portfolio() {
       </div>
       <footer className="global-footer">
         <div className="footer-location">
-          <span className="location-cross">⊕</span> İZMİR, TÜRKİYE
+          <span className="location-cross">⊕</span> IZMIR, TURKEY
           <span className="location-subtitle">38.4237° N / 27.1428° E</span>
         </div>
         <div className="footer-controls">

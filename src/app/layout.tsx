@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Samet Kabakci",
   },
   description:
-    "Explore the infrastructure universe of Samet Kabakci. Linux systems, cloud infrastructure, automation and engineering leadership, based in İzmir, Türkiye.",
+    "Explore the infrastructure universe of Samet Kabakci. Linux systems, cloud infrastructure, automation and engineering leadership, based in Izmir, Turkey.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Samet Kabakci — System Engineer",

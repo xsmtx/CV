@@ -40,7 +40,7 @@ id_ed25519*
 *.doc
 *.docx
 *.pdf
-!public/downloads/Samet-Kabakci-CV.pdf
+!public/downloads/Samet-Kabakci-CV.docx
 /AGENTS.md
 /CLAUDE.md
 /DESIGN.md

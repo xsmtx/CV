@@ -49,7 +49,9 @@ for (const [width, height, theme] of [
   await page.screenshot({ path: `qa/terminal/welcome-${width}-${theme}.png` });
   await page.locator("#terminal-command").fill("uptime");
   await page.locator("#terminal-command").press("Enter");
-  await expect(page.locator(".terminal-entry pre").last()).toContainText("yıl");
+  await expect(page.locator(".terminal-entry pre").last()).toContainText(
+    "years",
+  );
   await page.screenshot({ path: `qa/terminal/uptime-${width}-${theme}.png` });
   await page.locator("#terminal-command").fill("open lab");
   await page.locator("#terminal-command").press("Enter");

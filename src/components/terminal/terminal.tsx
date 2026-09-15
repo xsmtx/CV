@@ -108,25 +108,33 @@ export default function Terminal({
           "CV download is temporarily unavailable. Please try again.",
         );
       const bytes = await response.arrayBuffer();
-      if (new TextDecoder().decode(bytes.slice(0, 5)) !== "%PDF-")
+      // A DOCX is a ZIP package. Reject error pages returned with HTTP 200.
+      const signature = new Uint8Array(bytes, 0, Math.min(4, bytes.byteLength));
+      if (
+        signature.length !== 4 ||
+        signature[0] !== 0x50 ||
+        signature[1] !== 0x4b ||
+        signature[2] !== 0x03 ||
+        signature[3] !== 0x04
+      )
         throw new Error(
           "The CV document could not be loaded. Please try again.",
         );
       const url = URL.createObjectURL(
-        new Blob([bytes], { type: "application/pdf" }),
+        new Blob([bytes], { type: terminalProfile.cvMimeType }),
       );
       const link = document.createElement("a");
       link.href = url;
       link.download = terminalProfile.cvFilename;
       link.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 10000);
-      const text = `${terminalProfile.cvFilename}\n${(bytes.byteLength / 1024).toFixed(0)} KB · PDF ready. Download requested.`;
+      const text = `${terminalProfile.cvFilename}\n${(bytes.byteLength / 1024).toFixed(0)} KB · Word document ready. Download requested.`;
       setEntries((items) =>
         items.map((item) =>
           item.id === id ? { ...item, text, download: true } : item,
         ),
       );
-      setAnnouncement("CV PDF ready. Download requested.");
+      setAnnouncement("CV Word document ready. Download requested.");
     } catch (error) {
       const text = controller.signal.aborted
         ? "Download cancelled."
@@ -325,7 +333,7 @@ export default function Terminal({
                   href={terminalProfile.cvUrl}
                   download={terminalProfile.cvFilename}
                 >
-                  Download PDF again ↗
+                  Download Word document again ↗
                 </a>
               )}
             </div>

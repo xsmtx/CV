@@ -66,18 +66,18 @@ Sunucuya özgü bağlantı bilgileri ve dağıtım yapılandırmaları bu depoda
 
 ## Portfolio terminal
 
-`help` komutları listeler. `whoami` adı ve rolü, `uptime` İstanbul takvimine göre yaşı yıl/ay/gün olarak, `uptime --session` tarayıcı oturum süresini gösterir. `skills linux`, `projects scb`, `experience`, `neofetch` ve `contact` profil verilerini okur. `theme light`, `theme dark` ve `open projects` siteyi kontrol eder.
+`help` komutları listeler. `whoami` adı ve rolü, `uptime` İstanbul takvimine göre yaşı İngilizce `years / months / days` olarak, `uptime --session` tarayıcı oturum süresini gösterir. `skills linux`, `projects scb`, `experience`, `neofetch` ve `contact` profil verilerini okur. `theme light`, `theme dark` ve `open projects` siteyi kontrol eder.
 
-`curl CV` veya `wget CV`, herkese açık PDF CV'yi indirir. ↑/↓ komut geçmişi, Tab tek eşleşmeyi tamamlama, Ctrl+L temizleme, Esc kapatma içindir. Bu komutlar tarayıcıdaki profil arayüzüne aittir; sunucuda kabuk komutları çalıştırılmaz.
+`curl CV` veya `wget CV`, Samet'in hazırladığı orijinal Word CV'yi indirir. ↑/↓ komut geçmişi, Tab tek eşleşmeyi tamamlama, Ctrl+L temizleme, Esc kapatma içindir. Bu komutlar tarayıcıdaki profil arayüzüne aittir; sunucuda kabuk komutları çalıştırılmaz.
 
-CV, `public/downloads/Samet-Kabakci-CV.pdf` konumundadır; metin görünümünden de indirilebilir. Genel profil verileri güncellendikten sonra PDF'yi yeniden üretmek için:
+CV, `public/downloads/Samet-Kabakci-CV.docx` konumundadır; metin görünümündeki **Download CV (Word)** bağlantısından da indirilebilir. Bu dosya, proje kökündeki özel hazırlanmış Word belgesinin birebir kopyasıdır. CV güncellendiğinde içeriğini ve biçimini koruyarak yayın kopyasını yenileyin:
 
-```sh
-python -m pip install reportlab
-node scripts/generate-cv.mjs
+```powershell
+Copy-Item -LiteralPath Samet-Kabakci-CV.docx -Destination public/downloads/Samet-Kabakci-CV.docx
+npm run build
 ```
 
-Üretici Windows'ta Arial, Linux'ta DejaVu Sans kullanır (`CV_FONT_DIR` ile font klasörü değiştirilebilir). PDF'yi yayınlamadan önce iki sayfanın düzenini kontrol edin. Orijinal Word belgesi ve diğer kişisel belgeler `.gitignore` kapsamında kalır; yalnızca bu genel PDF için istisna vardır.
+`.gitignore` yalnızca bu indirilebilir Word dosyasına izin verir. Proje kökündeki kaynak belge ve diğer kişisel belgeler dışarıda kalır. CV, profil verilerinden otomatik olarak yeniden üretilmez.
 
 ## İçerik ve proje yapısı
 

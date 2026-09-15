@@ -146,7 +146,7 @@ export function executeCommand(
   switch (command) {
     case "help":
       return {
-        text: `SAMET / PORTFOLIO SHELL\nExplore my work through familiar commands.\n\nwhoami             Name and role\nuptime             Age in calendar years, months and days\nuptime --session   Time in this browser session\nneofetch           Profile overview\nskills [domain]    Technical skills and experience levels\nprojects [id]      Projects and architecture\nexperience         Career timeline\ncontact            Public contact details\nls / pwd / cat     Browse the profile files\ncurl CV            Download my CV as a PDF\nstatus             Current browser and scene status\ndate               Local time in İzmir\ntheme dark|light   Change the site's theme\nopen <space>       Travel to a space\nhistory            Commands in this session\nclear / exit       Clear the screen or close the terminal\n\nTry: skills linux · projects scb · cat about.txt\nSpaces: ${scenes.map((s) => s.id).join(", ")}\n\n↑ ↓ history · Tab completes a unique match\nCtrl+L clears · Ctrl+C cancels input · Esc closes`,
+        text: `SAMET / PORTFOLIO SHELL\nExplore my work through familiar commands.\n\nwhoami             Name and role\nuptime             Age in calendar years, months and days\nuptime --session   Time in this browser session\nneofetch           Profile overview\nskills [domain]    Technical skills and experience levels\nprojects [id]      Projects and architecture\nexperience         Career timeline\ncontact            Public contact details\nls / pwd / cat     Browse the profile files\ncurl CV            Download my CV as a Word document\nstatus             Current browser and scene status\ndate               Local time in Izmir\ntheme dark|light   Change the site's theme\nopen <space>       Travel to a space\nhistory            Commands in this session\nclear / exit       Clear the screen or close the terminal\n\nTry: skills linux · projects scb · cat about.txt\nSpaces: ${scenes.map((s) => s.id).join(", ")}\n\n↑ ↓ history · Tab completes a unique match\nCtrl+L clears · Ctrl+C cancels input · Esc closes`,
       };
     case "whoami":
       return { text: `${profile.fullName}\n${profile.title}` };
@@ -164,8 +164,10 @@ export function executeCommand(
       if (!terminalProfile.birthDate)
         return { text: "Birth date has not been configured yet.", error: true };
       const age = calendarAge(terminalProfile.birthDate, context.now);
+      const unit = (value: number, label: string) =>
+        `${value} ${label}${value === 1 ? "" : "s"}`;
       return {
-        text: `${profile.fullName} / uptime\n${age.years} yıl · ${age.months} ay · ${age.days} gün\n${age.totalDays.toLocaleString("tr-TR")} days since boot. Still learning.`,
+        text: `${profile.fullName} / uptime\n${unit(age.years, "year")} · ${unit(age.months, "month")} · ${unit(age.days, "day")}\n${age.totalDays.toLocaleString("en-GB")} days since boot. Still learning.`,
       };
     }
     case "neofetch":
@@ -183,7 +185,7 @@ export function executeCommand(
     case "ls":
       if (!arg || arg === "." || arg === "~")
         return {
-          text: "about.txt\ncontact.txt\nexperience.log\nskills/\nprojects/\nCV.pdf\n\nRead a file with cat, or download the CV with curl CV.",
+          text: "about.txt\ncontact.txt\nexperience.log\nskills/\nprojects/\nCV.docx\n\nRead a file with cat, or download the CV with curl CV.",
         };
       if (/^skills\/?$/.test(arg))
         return {
@@ -198,9 +200,9 @@ export function executeCommand(
       if (arg === "about.txt") return { text: about() };
       if (arg === "contact.txt") return { text: contact() };
       if (arg === "experience.log") return { text: career() };
-      if (arg === "cv.pdf")
+      if (arg === "cv.docx")
         return {
-          text: "CV.pdf is a PDF document. Use curl CV to download it.",
+          text: "CV.docx is a Word document. Use curl CV to download it.",
         };
       return { text: `cat: unknown profile file. Try ls.`, error: true };
     case "skills": {
@@ -227,9 +229,9 @@ export function executeCommand(
       return { text: contact() };
     case "curl":
     case "wget":
-      return /^(?:-o )?cv(?:\.pdf)?$/.test(arg)
+      return /^(?:-o )?cv(?:\.docx)?$/.test(arg)
         ? {
-            text: "Fetching Samet-Kabakci-CV.pdf…",
+            text: `Fetching ${terminalProfile.cvFilename}…`,
             action: { type: "download" },
           }
         : usage(`${command} CV`);

@@ -37,6 +37,7 @@ export function FallbackWorld({
         <div className="fallback-ring ring-one" />
         <div className="fallback-ring ring-two" />
         <div className="fallback-ring ring-three" />
+        {scene === 5 && <div className="fallback-sunrise" />}
         {scene === 1 ? (
           <svg className="fallback-topology" viewBox="0 0 500 500">
             {Array.from({ length: 7 }, (_, i) => {

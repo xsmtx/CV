@@ -16,9 +16,13 @@ import { MeteorImpact } from "@/experience/effects/meteor-impact";
 export function Earth({
   runtime,
   theme,
+  radius = 2,
+  horizon = false,
 }: {
   runtime: WorldRuntime;
   theme: Theme;
+  radius?: number;
+  horizon?: boolean;
 }) {
   const material = useRef<THREE.ShaderMaterial>(null);
   const land = useLoader(THREE.TextureLoader, "/assets/earth-land.svg");
@@ -28,6 +32,7 @@ export function Earth({
   const uniforms = useMemo(
     () => ({
       uLand: { value: land },
+      uHorizon: { value: horizon ? 1 : 0 },
       uTime: { value: 0 },
       uWire: { value: 0 },
       uImpact: { value: 0 },
@@ -35,14 +40,18 @@ export function Earth({
       uQuiet: { value: 0 },
       uImpactPoint: { value: new THREE.Vector3() },
     }),
-    [land],
+    [land, horizon],
+  );
+  const atmosphereUniforms = useMemo(
+    () => ({ uHorizon: { value: horizon ? 1 : 0 } }),
+    [horizon],
   );
   useFrame(() => {
     if (!material.current) return;
     const u = material.current.uniforms;
     u.uTime.value = runtime.skyTime;
-    u.uWire.value = runtime.wireframe ? 1 : 0;
-    u.uImpact.value = runtime.impact.active ? 1 : 0;
+    u.uWire.value = !horizon && runtime.wireframe ? 1 : 0;
+    u.uImpact.value = !horizon && runtime.impact.active ? 1 : 0;
     u.uImpactAge.value = runtime.impact.quiet
       ? 0.22
       : runtime.impact.age - METEOR_FLIGHT;
@@ -52,7 +61,7 @@ export function Earth({
   return (
     <group>
       <mesh name="earth-surface">
-        <sphereGeometry args={[2, low ? 64 : 96, low ? 40 : 64]} />
+        <sphereGeometry args={[radius, low ? 64 : 96, low ? 40 : 64]} />
         <shaderMaterial
           ref={material}
           vertexShader={planetVertex}
@@ -62,16 +71,24 @@ export function Earth({
         />
       </mesh>
       <mesh scale={1.012}>
-        <sphereGeometry args={[2, 64, 40]} />
+        <sphereGeometry args={[radius, 64, 40]} />
         <shaderMaterial
           vertexShader={planetVertex}
           fragmentShader={earthAtmosphereFragment}
+          uniforms={atmosphereUniforms}
           transparent
           depthWrite={false}
           blending={THREE.AdditiveBlending}
         />
       </mesh>
-      <MeteorImpact runtime={runtime} target={target} low={low} theme={theme} />
+      {!horizon && (
+        <MeteorImpact
+          runtime={runtime}
+          target={target}
+          low={low}
+          theme={theme}
+        />
+      )}
     </group>
   );
 }

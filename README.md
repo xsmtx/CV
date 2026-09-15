@@ -7,6 +7,7 @@
 - Home, Systems, Experience, Projects, Lab ve Contact sahneleri.
 - Yumuşak kamera geçişleri ve sürüklenebilen üç boyutlu modeller.
 - Gerçek kıyı çizgileri, okyanuslar, bulutlar ve atmosfer katmanıyla Dünya görünümü.
+- Contact sahnesinde koyu Dünya ufku, gezegenin arkasından görünen güneş ve sıcak atmosfer ışığı.
 - Home sahnesinde tıklamayla gelen meteor, yüzeyde çarpma dalgası ve kıvılcımlar.
 - Yıldızlar, bulutsular, kayan yıldızlar, küçük kozmik patlamalar ve Gargantua görselleştirmesi.
 - Sistem tercihini izleyen, kullanıcı seçimini saklayan açık/koyu tema.
@@ -104,6 +105,7 @@ Yerel önizleme açıkken ek görsel ve performans kontrolleri:
 npm run test:qa
 node scripts/cosmos-qa.mjs
 node scripts/earth-impact-qa.mjs
+node scripts/contact-sunrise-qa.mjs
 node scripts/check-sky-numerics.mjs
 node scripts/performance-qa.mjs
 ```

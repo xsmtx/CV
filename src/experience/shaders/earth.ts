@@ -6,6 +6,7 @@ export const earthFragment = /* glsl */ `
   varying vec3 vLocal;
   uniform sampler2D uLand;
   uniform float uTime;
+  uniform float uHorizon;
   uniform float uWire;
   uniform float uImpact;
   uniform float uImpactAge;
@@ -35,10 +36,10 @@ export const earthFragment = /* glsl */ `
     surface=mix(surface,vec3(.25,.33,.37),ice*.9);
     vec3 n=normalize(vNormal);
     vec3 view=normalize(-vPosition);
-    vec3 sun=normalize(vec3(.78,.50,.28));
+    vec3 sun=normalize(mix(vec3(.78,.50,.28),vec3(.35,.78,-.48),uHorizon));
     float diffuse=max(dot(n,sun),0.);
     float day=smoothstep(-.14,.28,dot(n,sun));
-    vec3 color=surface*(.10+diffuse*1.15)*mix(.32,1.,day);
+    vec3 color=surface*(mix(.10,.23,uHorizon)+diffuse*1.15)*mix(mix(.32,.65,uHorizon),1.,day);
     float glint=pow(max(dot(n,normalize(sun+view)),0.),100.);
     color+=vec3(.38,.50,.62)*glint*(1.-land)*.12;
     vec3 wind=p+vec3(uTime*.014,0.,-uTime*.009);
@@ -51,6 +52,8 @@ export const earthFragment = /* glsl */ `
     color=mix(color,vec3(.18,.23,.28)*(.10+diffuse*.70),clouds*.58);
     float rim=pow(clamp(1.-dot(n,view),0.,1.),3.4);
     color+=vec3(.06,.13,.22)*rim*day*.55;
+    float dawn=pow(max(dot(n,normalize(vec3(.35,.94,-.12))),0.),8.);
+    color+=vec3(1.,.40,.09)*rim*dawn*uHorizon*.75;
     float settlements=smoothstep(.76,.91,noise3(p*85.))*smoothstep(.57,.79,terrainNoise(p*4.));
     color+=vec3(1.,.49,.13)*settlements*land*(1.-day)*.55;
     if(uImpact>.5&&uImpactAge>=0.) {
@@ -74,10 +77,13 @@ export const earthFragment = /* glsl */ `
 export const earthAtmosphereFragment = /* glsl */ `
   varying vec3 vNormal;
   varying vec3 vPosition;
+  uniform float uHorizon;
   void main() {
     vec3 n=normalize(vNormal);
     float rim=pow(clamp(1.-abs(dot(n,normalize(-vPosition))),0.,1.),3.8);
     float day=max(dot(n,normalize(vec3(.78,.50,.28))),0.);
-    gl_FragColor=vec4(vec3(.17,.30,.43),rim*(.035+day*.25));
+    float dawn=pow(max(dot(n,normalize(vec3(.35,.94,-.12))),0.),8.);
+    vec3 tint=mix(vec3(.17,.30,.43),vec3(1.,.48,.16),dawn*uHorizon);
+    gl_FragColor=vec4(tint,rim*(.035+day*.25+dawn*uHorizon*.50));
   }
 `;

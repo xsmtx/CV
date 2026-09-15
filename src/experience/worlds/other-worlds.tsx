@@ -1,21 +1,22 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { systems } from "@/data/systems";
 import { seededRandom, type WorldRuntime } from "@/experience/runtime";
 import { SceneAnchor } from "./scene-anchor";
-import { planetVertex } from "@/experience/shaders/planet";
 import { Core } from "@/experience/objects/core";
 import { ConnectionLines, Orbit } from "@/experience/objects/primitives";
 import { ArchitecturalMaterial } from "@/experience/objects/architectural-material";
 import { MineralBody } from "@/experience/objects/mineral";
 import { ReactorAssembly } from "@/experience/objects/reactor-assembly";
 import { LightFlare } from "@/experience/effects/light-flare";
-import { noiseGLSL } from "@/experience/shaders/noise";
+import { EarthHorizon } from "@/experience/objects/earth-horizon";
+import type { Theme } from "@/lib/theme";
 
 interface Props {
+  theme: Theme;
   runtime: WorldRuntime;
   onSystem: (index: number) => void;
   onTimeline: (index: number) => void;
@@ -482,59 +483,8 @@ function Reactor({ runtime }: { runtime: WorldRuntime }) {
   );
 }
 
-const horizonFragment = /* glsl */ `
-  varying vec3 vNormal; varying vec3 vPosition; varying vec3 vLocal;
-  ${noiseGLSL}
-  void main() {
-    vec3 n=normalize(vNormal);
-    vec3 p=normalize(vLocal)*5.;
-    float continent=terrainNoise(p*2.);
-    float clouds=terrainNoise(p*9.+continent*2.);
-    float ridges=noise3(p*110.);
-    float rim=pow(1.-max(dot(n,normalize(-vPosition)),0.),9.);
-    float light=smoothstep(-.2,.7,n.y);
-    float dawn=pow(max(dot(n,normalize(vec3(.35,.95,.1))),0.),14.);
-    vec3 surface=mix(vec3(.003,.007,.011),vec3(.04,.057,.072),smoothstep(.25,.67,continent+clouds*.3));
-    vec3 color=surface*(.2+clouds*.9)*(ridges*.5+.5)*light;
-    color+=mix(vec3(.16,.28,.4),vec3(1.,.61,.3),dawn)*rim*light*(.38+clouds*.6);
-    float cities=smoothstep(.66,.81,clouds)*smoothstep(.8,.92,ridges)*(1.-rim);
-    color+=vec3(.6,.25,.055)*cities*.45;
-    gl_FragColor=vec4(color,1.);
-    #include <tonemapping_fragment>
-    #include <colorspace_fragment>
-  }
-`;
-function Horizon() {
-  const low = useThree((state) => state.viewport.dpr < 1.2);
-  const defines = useMemo(() => ({ LOW_DETAIL: low ? 1 : 0 }), [low]);
-  return (
-    <group position={[1, -7.7, -2]}>
-      <mesh>
-        <sphereGeometry args={[6.8, 96, 64]} />
-        <shaderMaterial
-          vertexShader={planetVertex}
-          fragmentShader={horizonFragment}
-          defines={defines}
-        />
-      </mesh>
-      <LightFlare
-        position={[2.32, 6.38, 1.05]}
-        size={4.2}
-        color="#ffd3a0"
-        strength={3}
-      />
-      <LightFlare
-        position={[2.32, 6.38, 1.05]}
-        size={1.2}
-        color="#fff5de"
-        strength={2.5}
-      />
-      <Orbit radius={7.9} tilt={[1.34, 0, 0.02]} opacity={0.12} />
-    </group>
-  );
-}
-
 export default function OtherWorlds({
+  theme,
   runtime,
   onSystem,
   onTimeline,
@@ -563,7 +513,7 @@ export default function OtherWorlds({
         </group>
       </SceneAnchor>
       <SceneAnchor index={5} runtime={runtime}>
-        <Horizon />
+        <EarthHorizon runtime={runtime} theme={theme} />
       </SceneAnchor>
     </>
   );

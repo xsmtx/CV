@@ -169,6 +169,7 @@ function Scene({
       {worldsEnabled && (
         <Suspense fallback={null}>
           <OtherWorlds
+            theme={theme}
             runtime={runtime}
             onSystem={onSystem}
             onTimeline={onTimeline}

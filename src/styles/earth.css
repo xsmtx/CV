@@ -13,9 +13,9 @@
   mix-blend-mode: screen;
 }
 .portfolio .fallback-scene-5 .fallback-object {
-  width: max(110vw, 105vh);
-  top: calc(60% + max(49.5vw, 47.25vh));
-  left: 58%;
+  width: max(64vw, 80vh);
+  top: calc(56% + max(28.8vw, 36vh));
+  left: 67%;
 }
 .fallback-scene-5 .fallback-planet {
   z-index: 1;
@@ -25,30 +25,44 @@
     url("/assets/earth-map.svg") 54% 60% / 215% 160%;
   filter: saturate(0.45);
   box-shadow:
-    inset 0 2px 4px #eec99970,
-    inset 0 7px 16px #54718622;
+    inset 0 1px 2px #eec99960,
+    inset 0 3px 8px #54718633;
 }
 .fallback-sunrise {
   position: absolute;
   z-index: 0;
   left: 63%;
   top: 7%;
-  width: 22%;
+  width: 18%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    #fff0cf 0 10%,
-    #f8ce90 12%,
-    #eaae6066 17%,
-    #d6893030 28%,
+    #fff0cf 0 5%,
+    #f8ce90 7%,
+    #eaae6066 12%,
+    #d6893030 24%,
     #d6893010 44%,
     transparent 68%
   );
 }
 [data-theme="light"] .fallback-scene-5 .fallback-sunrise {
   opacity: 0.8;
+}
+.fallback-scene-5 .fallback-ring {
+  display: none;
+}
+@media (max-width: 899px) {
+  .portfolio .fallback-scene-5 .fallback-object {
+    width: max(115vw, 70vh);
+    top: calc(59% + max(51.75vw, 31.5vh));
+    left: 50%;
+  }
+  .fallback-scene-5 .fallback-sunrise {
+    left: 69%;
+    top: 9.2%;
+  }
 }
 .fallback-impact {
   position: absolute;

@@ -39,7 +39,7 @@ export const earthFragment = /* glsl */ `
     vec3 sun=normalize(mix(vec3(.78,.50,.28),vec3(.35,.78,-.48),uHorizon));
     float diffuse=max(dot(n,sun),0.);
     float day=smoothstep(-.14,.28,dot(n,sun));
-    vec3 color=surface*(mix(.10,.23,uHorizon)+diffuse*1.15)*mix(mix(.32,.65,uHorizon),1.,day);
+    vec3 color=surface*(mix(.10,.14,uHorizon)+diffuse*1.15)*mix(mix(.32,.58,uHorizon),1.,day);
     float glint=pow(max(dot(n,normalize(sun+view)),0.),100.);
     color+=vec3(.38,.50,.62)*glint*(1.-land)*.12;
     vec3 wind=p+vec3(uTime*.014,0.,-uTime*.009);
@@ -53,7 +53,8 @@ export const earthFragment = /* glsl */ `
     float rim=pow(clamp(1.-dot(n,view),0.,1.),3.4);
     color+=vec3(.06,.13,.22)*rim*day*.55;
     float dawn=pow(max(dot(n,normalize(vec3(.35,.94,-.12))),0.),8.);
-    color+=vec3(1.,.40,.09)*rim*dawn*uHorizon*.75;
+    color+=vec3(1.,.40,.09)*pow(rim,1.7)*dawn*uHorizon*.48;
+    color+=vec3(.04,.12,.25)*rim*uHorizon*.22;
     float settlements=smoothstep(.76,.91,noise3(p*85.))*smoothstep(.57,.79,terrainNoise(p*4.));
     color+=vec3(1.,.49,.13)*settlements*land*(1.-day)*.55;
     if(uImpact>.5&&uImpactAge>=0.) {
@@ -80,10 +81,10 @@ export const earthAtmosphereFragment = /* glsl */ `
   uniform float uHorizon;
   void main() {
     vec3 n=normalize(vNormal);
-    float rim=pow(clamp(1.-abs(dot(n,normalize(-vPosition))),0.,1.),3.8);
+    float rim=pow(clamp(1.-abs(dot(n,normalize(-vPosition))),0.,1.),mix(3.8,5.6,uHorizon));
     float day=max(dot(n,normalize(vec3(.78,.50,.28))),0.);
     float dawn=pow(max(dot(n,normalize(vec3(.35,.94,-.12))),0.),8.);
     vec3 tint=mix(vec3(.17,.30,.43),vec3(1.,.48,.16),dawn*uHorizon);
-    gl_FragColor=vec4(tint,rim*(.035+day*.25+dawn*uHorizon*.50));
+    gl_FragColor=vec4(tint,rim*(.035+day*.25+dawn*uHorizon*.26));
   }
 `;

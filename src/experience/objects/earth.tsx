@@ -70,7 +70,7 @@ export function Earth({
           defines={defines}
         />
       </mesh>
-      <mesh scale={1.012}>
+      <mesh scale={horizon ? 1.006 : 1.012}>
         <sphereGeometry args={[radius, 64, 40]} />
         <shaderMaterial
           vertexShader={planetVertex}

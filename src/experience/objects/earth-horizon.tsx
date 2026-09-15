@@ -1,10 +1,9 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Earth } from "./earth";
-import { Orbit } from "./primitives";
 import type { WorldRuntime } from "@/experience/runtime";
 import type { Theme } from "@/lib/theme";
 
@@ -20,16 +19,14 @@ const sunFragment = /* glsl */ `
   void main() {
     vec2 p=(vUv-.5)*2.;
     float r=length(p);
-    float disk=1.-smoothstep(.115,.132,r);
-    float corona=exp(-r*6.5)*.72+exp(-r*16.)*.55;
+    float disk=1.-smoothstep(.065,.084,r);
+    float corona=exp(-r*7.5)*.55+exp(-r*22.)*.80;
     float ray=exp(-abs(p.y)*110.)*exp(-abs(p.x)*5.)*.12;
     float edge=1.-smoothstep(.72,1.,r);
     vec3 color=mix(vec3(1.,.48,.14),vec3(1.,.94,.76),disk);
     gl_FragColor=vec4(color,clamp(disk+corona+ray,0.,1.)*edge);
   }
 `;
-
-const radius = 6.8;
 
 export function EarthHorizon({
   runtime,
@@ -38,6 +35,8 @@ export function EarthHorizon({
   runtime: WorldRuntime;
   theme: Theme;
 }) {
+  const mobile = useThree((state) => state.size.width < 900);
+  const radius = mobile ? 4.2 : 4.8;
   const root = useRef<THREE.Group>(null);
   const globe = useRef<THREE.Group>(null);
   const sun = useRef<THREE.Mesh>(null);
@@ -63,8 +62,8 @@ export function EarthHorizon({
     work.up.setFromMatrixColumn(camera.matrixWorld, 1);
     work.radial
       .setFromMatrixColumn(camera.matrixWorld, 0)
-      .multiplyScalar(0.34)
-      .addScaledVector(work.up, 0.94);
+      .multiplyScalar(mobile ? 0.55 : 0.34)
+      .addScaledVector(work.up, mobile ? 0.835 : 0.94);
     work.radial
       .addScaledVector(work.view, -work.radial.dot(work.view))
       .normalize();
@@ -79,15 +78,15 @@ export function EarthHorizon({
     sun.current.position
       .copy(work.eye)
       .lerp(work.tangent, 1.22)
-      .addScaledVector(work.radial, 0.08);
+      .addScaledVector(work.radial, 0.02);
     sun.current.quaternion.copy(camera.quaternion);
   });
   return (
-    <group ref={root} position={[1, -7.7, -2]}>
+    <group ref={root} position={mobile ? [1.3, -4.7, -6] : [3.6, -5.3, -6]}>
       <group ref={globe} rotation={[-0.55, 0.5, -0.12]}>
         <Earth runtime={runtime} theme={theme} radius={radius} horizon />
       </group>
-      <mesh ref={sun} name="contact-sun" scale={7}>
+      <mesh ref={sun} name="contact-sun" scale={5.4}>
         <planeGeometry args={[1, 1]} />
         <shaderMaterial
           vertexShader={sunVertex}
@@ -99,7 +98,6 @@ export function EarthHorizon({
           }
         />
       </mesh>
-      <Orbit radius={7.9} tilt={[1.34, 0, 0.02]} opacity={0.12} />
     </group>
   );
 }
